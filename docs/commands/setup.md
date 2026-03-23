@@ -4,9 +4,8 @@ Initialize a project for skill development. Uses Socratic questioning to gather 
 
 ## Steps
 
-1. **Check workspace**: Create `~/.skill-conductor/projects/` if it doesn't exist
-2. **Determine project name**: Ask user, check for existing project
-3. **Socratic Questioning** (one at a time, adapt based on answers):
+1. **Check workspace**: Create `./skill-conductor/` in the current project directory if it doesn't exist
+2. **Socratic Questioning** (one at a time, adapt based on answers):
    - What does this skill project do? (one sentence)
    - Who's the target user?
    - What domains/areas does it cover?
@@ -17,10 +16,10 @@ Initialize a project for skill development. Uses Socratic questioning to gather 
    - Trigger strategy? (keywords, semantic, both)
    - Platform? (Obsidian, CLI, web app)
    - Output format? (Markdown, JSON, tables)
-4. **Generate files** from templates:
+3. **Generate files** from templates into `./skill-conductor/`:
    - `project-context.md` — project definition
    - `guidelines.md` — writing standards
    - `workflow.md` — development process
    - `references.md` — reference sources
-5. **Verify format rules**: Use WebSearch to confirm current Claude Code SKILL.md requirements
-6. **Validate**: Run `validate-workspace.sh` on the generated workspace
+4. **Verify format rules**: Use WebSearch to confirm current Claude Code SKILL.md requirements
+5. **Validate**: Run `validate-workspace.sh ./skill-conductor/` to verify the setup

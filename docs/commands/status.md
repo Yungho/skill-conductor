@@ -4,7 +4,7 @@ Show progress overview with state machine visualization.
 
 ## Steps
 
-1. **Scan projects**: `~/.skill-conductor/projects/*/tracks/*/metadata.json`
+1. **Scan tracks**: `./skill-conductor/tracks/*/metadata.json`
 2. **Display visualization**:
 ```
 Track: 2026-03-23_musculoskeletal  [family-doctor]
@@ -15,4 +15,4 @@ Phase 3: Update Routing        ⬜ Pending
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Overall: ██████████░░░░░░░░░░ 40%
 ```
-3. **Update registry**: Run `sync-registry.sh`
+3. **Update registry**: Run `sync-registry.sh` on current project

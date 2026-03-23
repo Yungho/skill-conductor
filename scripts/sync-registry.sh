@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # sync-registry.sh — Sync registry.md with actual skill files in a project
 # Usage: bash sync-registry.sh <project-path> [registry-path]
-# If registry-path is not provided, defaults to ~/.skill-conductor/registry.md
+# If registry-path is not provided, defaults to <project-path>/skill-conductor/registry.md
 
 set -euo pipefail
 
 PROJECT_PATH="${1:?Usage: sync-registry.sh <project-path> [registry-path]}"
-REGISTRY_PATH="${2:-$HOME/.skill-conductor/registry.md}"
+REGISTRY_PATH="${2:-$PROJECT_PATH/skill-conductor/registry.md}"
 PROJECT_NAME=$(basename "$PROJECT_PATH")
 
 echo "============================================================"

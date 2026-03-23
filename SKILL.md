@@ -28,23 +28,26 @@ Read the relevant command file when that command is invoked.
 
 ## Workspace Structure
 
-All artifacts live in `~/.skill-conductor/`. Created automatically on first use.
+Workspace lives at `./skill-conductor/` inside the current project directory (created automatically on first use).
 
 ```
-~/.skill-conductor/
-├── registry.md                # Global skill index across all projects
-└── projects/
-    └── <project-name>/
-        ├── project-context.md # What this project does, who it's for
-        ├── guidelines.md      # SKILL.md writing standards
-        ├── workflow.md        # Development process for this project
-        ├── references.md      # Where to search for inspiration
-        └── tracks/
-            └── <date>_<name>/ # One directory per development track
-                ├── spec.md    # Requirements
-                ├── plan.md    # Task checklist
-                └── metadata.json
+<project-root>/
+├── skill-conductor/
+│   ├── project-context.md # What this project does, who it's for
+│   ├── guidelines.md      # SKILL.md writing standards
+│   ├── workflow.md        # Development process for this project
+│   ├── references.md      # Where to search for inspiration
+│   └── tracks/
+│       └── <date>_<name>/ # One directory per development track
+│           ├── spec.md    # Requirements
+│           ├── plan.md    # Task checklist
+│           └── metadata.json
+├── some-skill/
+│   └── SKILL.md
+└── ...
 ```
+
+The workspace path is relative to the project. To find it, check the current working directory for `./skill-conductor/`. If it doesn't exist, `setup` will create it.
 
 Templates: `${CLAUDE_SKILL_DIR}/templates/`
 Scripts: `${CLAUDE_SKILL_DIR}/scripts/`

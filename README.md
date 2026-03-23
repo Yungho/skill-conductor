@@ -58,20 +58,23 @@ skill-conductor/
 ## Workspace
 
 ```
-~/.skill-conductor/
-├── registry.md                # Global skill index
-└── projects/
-    └── <project-name>/
-        ├── project-context.md
-        ├── guidelines.md
-        ├── workflow.md
-        ├── references.md
-        └── tracks/
-            └── <date>_<name>/
-                ├── spec.md
-                ├── plan.md
-                └── metadata.json
+<project-root>/
+├── skill-conductor/
+│   ├── project-context.md
+│   ├── guidelines.md
+│   ├── workflow.md
+│   ├── references.md
+│   └── tracks/
+│       └── <date>_<name>/
+│           ├── spec.md
+│           ├── plan.md
+│           └── metadata.json
+├── some-skill/
+│   └── SKILL.md
+└── ...
 ```
+
+The workspace lives at `./skill-conductor/` inside your project. No hidden directories, no global paths.
 
 ## Design Principles
 
