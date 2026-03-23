@@ -15,7 +15,7 @@ echo ""
 ERRORS=0
 
 # Check required files
-for file in product.md guidelines.md workflow.md references.md tracks-registry.md index.md; do
+for file in product.md guidelines.md workflow.md references.md tracks.md index.md; do
   if [ -f "$PROJECT_PATH/$file" ]; then
     echo "✅ $file exists"
   else

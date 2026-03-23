@@ -29,4 +29,4 @@ Execute the next pending task in the active track's plan.
    - Verify format rules via WebSearch if unsure
 6. **Checkpoint**: If at a phase boundary (per adaptive strategy), pause for user verification before proceeding to next task
 7. **Show state**: Display progress visualization with percentage bar
-8. **Update tracks-registry**: Run `sync-registry.sh` to refresh the project's tracks-registry.md
+8. **Update tracks-registry**: Run `sync-registry.sh` to refresh the project's tracks.md

@@ -26,33 +26,34 @@ Detailed instructions for each command are in `${CLAUDE_SKILL_DIR}/docs/commands
 
 Read the relevant command file when that command is invoked.
 
-## Workspace Structure
+## Multi-Project Support
 
-Workspace lives at `./skill-conductor/` inside the current project directory (created automatically on first use).
+Each project maintains its **own independent workspace**. The workspace name is configurable (default: `skill-conductor/`). Set it in your project's `.claude/CLAUDE.md`.
 
 ```
-<project-root>/
-├── skill-conductor/
-│   ├── index.md              # Track overview table
-│   ├── product.md            # What this project does, who it's for
-│   ├── guidelines.md         # SKILL.md writing standards
-│   ├── workflow.md           # Development process
-│   ├── references.md         # Where to search for inspiration
-│   ├── tracks-registry.md    # All tracks with status
-│   └── tracks/
-│       └── <name>/           # User-specified name (no date prefix)
-│           ├── index.md      # Track file links
-│           ├── spec.md       # Requirements
-│           ├── plan.md       # Task checklist (auto-updated by implement)
-│           └── metadata.json # Track metadata (includes created_at date)
-├── some-skill/
-│   └── SKILL.md
-└── ...
+project-a/                          project-b/
+├── skill-conductor/                ├── conductor/          ← custom name
+│   ├── index.md                    │   ├── index.md
+│   ├── product.md                  │   ├── product.md
+│   ├── guidelines.md               │   ├── guidelines.md
+│   ├── workflow.md                 │   ├── workflow.md
+│   ├── references.md               │   ├── references.md
+│   ├── tracks.md                   │   ├── tracks.md
+│   └── tracks/                     │   └── tracks/
+│       └── <track-id>/             │       └── <track-id>/
+│           ├── index.md            │           ├── index.md
+│           ├── spec.md             │           ├── spec.md
+│           ├── plan.md             │           ├── plan.md
+│           └── metadata.json       │           └── metadata.json
+└── some-skill/                     └── src/
+    └── SKILL.md
 ```
 
 Track directories use the user-specified name (e.g., `musculoskeletal-care`), not a date prefix. The creation date is stored in `metadata.json`.
 
-The workspace path is relative to the project. To find it, check the current working directory for `./skill-conductor/`. If it doesn't exist, `setup` will create it.
+To find the workspace, check the current working directory for the configured workspace directory. If it doesn't exist, `setup` will create it.
+
+**CLAUDE.md**: The `.claude/CLAUDE.md` file (included with this skill) provides file resolution protocol and default paths. Copy it into your project's `.claude/` directory.
 
 Templates: `${CLAUDE_SKILL_DIR}/templates/`
 Scripts: `${CLAUDE_SKILL_DIR}/scripts/`

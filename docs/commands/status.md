@@ -12,13 +12,13 @@ Show progress overview with state machine visualization.
 
 ## Steps
 
-1. **Read tracks-registry**: `./skill-conductor/tracks-registry.md`
-2. **Scan tracks**: `./skill-conductor/tracks/*/metadata.json` and `./skill-conductor/tracks/*/plan.md`
+1. **Read tracks-registry**: `<workspace>/tracks.md`
+2. **Scan tracks**: `<workspace>/tracks/*/metadata.json` and `<workspace>/tracks/*/plan.md`
 3. **Auto-calculate status** from plan.md:
    - All `[x]` → `✅ Complete`
    - Some `[x]`, some `[ ]` → `⏳ In Progress`
    - All `[ ]` → `⬜ Pending`
-4. **Update tracks-registry.md**: Refresh Status column based on calculated status
+4. **Update tracks.md**: Refresh Status column based on calculated status
 5. **Display visualization**:
 ```
 Track: musculoskeletal-care

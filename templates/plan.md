@@ -28,7 +28,7 @@ type: plan
 
 ## Phase 5: Publish
 - [ ] Update CHANGELOG.md
-- [ ] Update registry.md
+- [ ] Update tracks.md
 - [ ] Git commit + tag + push
 - [ ] GitHub release (optional)
 

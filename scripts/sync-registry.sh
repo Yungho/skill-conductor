@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# sync-registry.sh — Sync tracks-registry.md with actual track directories
+# sync-registry.sh — Sync tracks.md with actual track directories
 # Usage: bash sync-registry.sh <project-path> [registry-path]
-# If registry-path is not provided, defaults to <project-path>/skill-conductor/tracks-registry.md
+# If registry-path is not provided, defaults to <project-path>/skill-conductor/tracks.md
 
 set -euo pipefail
 
 PROJECT_PATH="${1:?Usage: sync-registry.sh <project-path> [registry-path]}"
-REGISTRY_PATH="${2:-$PROJECT_PATH/skill-conductor/tracks-registry.md}"
+REGISTRY_PATH="${2:-$PROJECT_PATH/skill-conductor/tracks.md}"
 PROJECT_NAME=$(basename "$PROJECT_PATH")
 
 echo "============================================================"
@@ -53,8 +53,10 @@ for track_dir in "$TRACKS_DIR"/*/; do
 
   # Auto-calculate status from plan.md if exists
   if [ -f "$track_dir/plan.md" ]; then
-    TOTAL=$(grep -cE '^\s*- \[[ x]\]' "$track_dir/plan.md" 2>/dev/null || echo 0)
-    DONE=$(grep -cE '^\s*- \[x\]' "$track_dir/plan.md" 2>/dev/null || echo 0)
+    TOTAL=$(grep -cE '^\s*- \[[ x]\]' "$track_dir/plan.md" 2>/dev/null || true)
+    TOTAL=${TOTAL:-0}
+    DONE=$(grep -cE '^\s*- \[x\]' "$track_dir/plan.md" 2>/dev/null || true)
+    DONE=${DONE:-0}
 
     if [ "$TOTAL" -gt 0 ]; then
       if [ "$DONE" -eq "$TOTAL" ]; then
@@ -70,7 +72,7 @@ for track_dir in "$TRACKS_DIR"/*/; do
   TABLE_ROWS="${TABLE_ROWS}| ${ID} | ${track_name} | ${STATUS} | ${OWNER} | [plan](tracks/${track_name}/plan.md) |"$'\n'
 done
 
-# Generate tracks-registry.md
+# Generate tracks.md
 mkdir -p "$(dirname "$REGISTRY_PATH")"
 cat > "$REGISTRY_PATH" << EOF
 ---

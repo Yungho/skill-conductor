@@ -9,7 +9,7 @@ A Claude Code skill that orchestrates the complete lifecycle of skill developmen
 - **Socratic questioning** — Guides you through creating project context and skill specifications
 - **Structured workflow** — Every change goes through spec → plan → implement → review → publish
 - **Automated validation** — Checks SKILL.md format, trigger conflicts, and description quality
-- **Multi-project support** — Manage skills across multiple projects from a single workspace
+- **Multi-project support** — Each project maintains its own independent workspace
 - **Intent recognition** — Understands what you mean, not just the words you use
 
 ## Installation
@@ -17,6 +17,8 @@ A Claude Code skill that orchestrates the complete lifecycle of skill developmen
 ```bash
 git clone https://github.com/Yungho/skill-conductor.git ~/.claude/skills/skill-conductor
 ```
+
+Then copy the `.claude/CLAUDE.md` content into your project's `.claude/CLAUDE.md` (merge with existing if you have one).
 
 ## Usage
 
@@ -57,29 +59,28 @@ skill-conductor/
 
 ## Workspace
 
+Each project maintains its own independent workspace. The workspace directory name is configurable (default: `skill-conductor/`).
+
 ```
-<project-root>/
-├── skill-conductor/
-│   ├── index.md              # Track overview table
-│   ├── product.md            # Project definition
-│   ├── guidelines.md         # Writing standards
-│   ├── workflow.md           # Development process
-│   ├── references.md         # Reference sources
-│   ├── tracks-registry.md    # All tracks with status
-│   └── tracks/
-│       └── <name>/           # User-specified name
-│           ├── index.md
-│           ├── spec.md
-│           ├── plan.md       # Auto-updated by implement
-│           └── metadata.json
-├── some-skill/
-│   └── SKILL.md
-└── ...
+your-project/                       another-project/
+├── skill-conductor/                ├── conductor/          ← custom name
+│   ├── index.md                    │   ├── index.md
+│   ├── product.md                  │   ├── product.md
+│   ├── guidelines.md               │   ├── guidelines.md
+│   ├── workflow.md                 │   ├── workflow.md
+│   ├── references.md               │   ├── references.md
+│   ├── tracks.md                   │   ├── tracks.md
+│   └── tracks/                     │   └── tracks/
+│       └── <name>/                 │       └── <name>/
+│           ├── index.md            │           ├── index.md
+│           ├── spec.md             │           ├── spec.md
+│           ├── plan.md             │           ├── plan.md
+│           └── metadata.json       │           └── metadata.json
+└── some-skill/                     └── src/
+    └── SKILL.md
 ```
 
-The workspace lives at `./skill-conductor/` inside your project.
-
-The workspace lives at `./skill-conductor/` inside your project. No hidden directories, no global paths.
+Set your workspace directory name in `.claude/CLAUDE.md`.
 
 ## Design Principles
 
