@@ -1,3 +1,11 @@
+---
+title: "Command: validate"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: validate
 
 Quick validation of a single SKILL.md file.

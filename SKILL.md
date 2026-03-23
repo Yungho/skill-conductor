@@ -84,3 +84,14 @@ These rules prevent the most common failure mode — skills that silently don't 
 - SKILL.md should stay under 500 lines. Move detailed reference material to separate files.
 
 Always verify these rules externally via WebSearch before applying them — the limits may have changed.
+
+## Content Creation
+
+When creating or editing `.md` files, prefer Obsidian-compatible Markdown if the project runs in Obsidian:
+
+- **obsidian-markdown** — Wikilinks, callouts, embeds, properties, Mermaid, math
+- **obsidian-bases** — Database-like views with filters and formulas
+- **obsidian-json-canvas** — Visual mind maps and flowcharts
+- **obsidian-cli** — Vault operations from CLI
+
+For non-Obsidian users, fall back to standard Markdown (no wikilinks, no callouts, no `%%comments%%`). All templates include YAML frontmatter which works in both Obsidian and standard Markdown processors.

@@ -1,3 +1,11 @@
+---
+title: "Command: review"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: review
 
 Run the 7-step review pipeline on a track's SKILL.md.

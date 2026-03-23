@@ -1,3 +1,11 @@
+---
+title: "Command: setup"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: setup
 
 Initialize a project for skill development. Uses Socratic questioning to gather context and generate standardized files.

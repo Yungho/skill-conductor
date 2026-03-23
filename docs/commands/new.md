@@ -1,3 +1,11 @@
+---
+title: "Command: new"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: new
 
 Create a new development track with spec and plan. Uses Socratic questioning.

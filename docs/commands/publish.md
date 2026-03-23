@@ -1,3 +1,11 @@
+---
+title: "Command: publish"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: publish
 
 Version bump + CHANGELOG + Git + GitHub release.

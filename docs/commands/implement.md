@@ -1,3 +1,11 @@
+---
+title: "Command: implement"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: implement
 
 Execute the next pending task in the active track's plan.

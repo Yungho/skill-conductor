@@ -1,3 +1,11 @@
+---
+title: "Registry"
+tags:
+  - skill-conductor
+  - template
+type: registry
+---
+
 # Registry
 
 <!-- Auto-synced by skill-conductor. Manual edits will be overwritten. -->

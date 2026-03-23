@@ -1,3 +1,11 @@
+---
+title: "Command: status"
+tags:
+  - skill-conductor
+  - command
+date: 2026-03-23
+---
+
 # Command: status
 
 Show progress overview with state machine visualization.
