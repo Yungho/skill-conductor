@@ -15,7 +15,7 @@ echo ""
 ERRORS=0
 
 # Check required files
-for file in project-context.md guidelines.md workflow.md references.md; do
+for file in product.md guidelines.md workflow.md references.md tracks-registry.md index.md; do
   if [ -f "$PROJECT_PATH/$file" ]; then
     echo "✅ $file exists"
   else
@@ -30,14 +30,6 @@ if [ -d "$PROJECT_PATH/tracks" ]; then
   echo "✅ tracks/ directory exists ($((TRACK_COUNT - 1)) tracks)"
 else
   echo "ℹ️  tracks/ directory not yet created (will be created on first 'new')"
-fi
-
-# Check for SKILL.md description format issues in any linked project
-echo ""
-echo "Checking SKILL.md files referenced in project-context..."
-if [ -f "$PROJECT_PATH/project-context.md" ]; then
-  # Look for local file paths in references
-  echo "ℹ️  Manual check needed: run validate-skill.sh on each SKILL.md in the project"
 fi
 
 echo ""

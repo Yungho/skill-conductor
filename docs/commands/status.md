@@ -12,10 +12,16 @@ Show progress overview with state machine visualization.
 
 ## Steps
 
-1. **Scan tracks**: `./skill-conductor/tracks/*/metadata.json`
-2. **Display visualization**:
+1. **Read tracks-registry**: `./skill-conductor/tracks-registry.md`
+2. **Scan tracks**: `./skill-conductor/tracks/*/metadata.json` and `./skill-conductor/tracks/*/plan.md`
+3. **Auto-calculate status** from plan.md:
+   - All `[x]` → `✅ Complete`
+   - Some `[x]`, some `[ ]` → `⏳ In Progress`
+   - All `[ ]` → `⬜ Pending`
+4. **Update tracks-registry.md**: Refresh Status column based on calculated status
+5. **Display visualization**:
 ```
-Track: 2026-03-23_musculoskeletal  [family-doctor]
+Track: musculoskeletal-care
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Phase 1: Research & Design     ✅ Complete
 Phase 2: Create SKILL.md       ⏳ In Progress (2/3)
@@ -23,4 +29,4 @@ Phase 3: Update Routing        ⬜ Pending
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Overall: ██████████░░░░░░░░░░ 40%
 ```
-3. **Update registry**: Run `sync-registry.sh` on current project
+6. **Update project status** in tracks-registry if all tracks are complete or pending

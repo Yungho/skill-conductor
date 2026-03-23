@@ -60,19 +60,24 @@ skill-conductor/
 ```
 <project-root>/
 ├── skill-conductor/
-│   ├── project-context.md
-│   ├── guidelines.md
-│   ├── workflow.md
-│   ├── references.md
+│   ├── index.md              # Track overview table
+│   ├── product.md            # Project definition
+│   ├── guidelines.md         # Writing standards
+│   ├── workflow.md           # Development process
+│   ├── references.md         # Reference sources
+│   ├── tracks-registry.md    # All tracks with status
 │   └── tracks/
-│       └── <date>_<name>/
+│       └── <name>/           # User-specified name
+│           ├── index.md
 │           ├── spec.md
-│           ├── plan.md
+│           ├── plan.md       # Auto-updated by implement
 │           └── metadata.json
 ├── some-skill/
 │   └── SKILL.md
 └── ...
 ```
+
+The workspace lives at `./skill-conductor/` inside your project.
 
 The workspace lives at `./skill-conductor/` inside your project. No hidden directories, no global paths.
 

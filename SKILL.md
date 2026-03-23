@@ -33,19 +33,24 @@ Workspace lives at `./skill-conductor/` inside the current project directory (cr
 ```
 <project-root>/
 ├── skill-conductor/
-│   ├── project-context.md # What this project does, who it's for
-│   ├── guidelines.md      # SKILL.md writing standards
-│   ├── workflow.md        # Development process for this project
-│   ├── references.md      # Where to search for inspiration
+│   ├── index.md              # Track overview table
+│   ├── product.md            # What this project does, who it's for
+│   ├── guidelines.md         # SKILL.md writing standards
+│   ├── workflow.md           # Development process
+│   ├── references.md         # Where to search for inspiration
+│   ├── tracks-registry.md    # All tracks with status
 │   └── tracks/
-│       └── <date>_<name>/ # One directory per development track
-│           ├── spec.md    # Requirements
-│           ├── plan.md    # Task checklist
-│           └── metadata.json
+│       └── <name>/           # User-specified name (no date prefix)
+│           ├── index.md      # Track file links
+│           ├── spec.md       # Requirements
+│           ├── plan.md       # Task checklist (auto-updated by implement)
+│           └── metadata.json # Track metadata (includes created_at date)
 ├── some-skill/
 │   └── SKILL.md
 └── ...
 ```
+
+Track directories use the user-specified name (e.g., `musculoskeletal-care`), not a date prefix. The creation date is stored in `metadata.json`.
 
 The workspace path is relative to the project. To find it, check the current working directory for `./skill-conductor/`. If it doesn't exist, `setup` will create it.
 

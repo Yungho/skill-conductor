@@ -1,88 +1,97 @@
 #!/usr/bin/env bash
-# sync-registry.sh — Sync registry.md with actual skill files in a project
+# sync-registry.sh — Sync tracks-registry.md with actual track directories
 # Usage: bash sync-registry.sh <project-path> [registry-path]
-# If registry-path is not provided, defaults to <project-path>/skill-conductor/registry.md
+# If registry-path is not provided, defaults to <project-path>/skill-conductor/tracks-registry.md
 
 set -euo pipefail
 
 PROJECT_PATH="${1:?Usage: sync-registry.sh <project-path> [registry-path]}"
-REGISTRY_PATH="${2:-$PROJECT_PATH/skill-conductor/registry.md}"
+REGISTRY_PATH="${2:-$PROJECT_PATH/skill-conductor/tracks-registry.md}"
 PROJECT_NAME=$(basename "$PROJECT_PATH")
 
 echo "============================================================"
-echo "  Registry Sync"
+echo "  Tracks Registry Sync"
 echo "  Project: $PROJECT_NAME"
 echo "  Registry: $REGISTRY_PATH"
 echo "============================================================"
 echo ""
 
-# Find all SKILL.md files
-SKILL_FILES=$(find "$PROJECT_PATH" -name "SKILL.md" -type f 2>/dev/null | sort)
+# Find all track directories (each has metadata.json)
+TRACKS_DIR="$PROJECT_PATH/skill-conductor/tracks"
 
-if [ -z "$SKILL_FILES" ]; then
-  echo "❌ No SKILL.md files found in $PROJECT_PATH"
-  exit 1
+if [ ! -d "$TRACKS_DIR" ]; then
+  echo "ℹ️  No tracks/ directory found. Nothing to sync."
+  exit 0
 fi
 
-# Ensure registry exists
-if [ ! -f "$REGISTRY_PATH" ]; then
-  mkdir -p "$(dirname "$REGISTRY_PATH")"
-  cat > "$REGISTRY_PATH" << 'EOF'
-# Registry
+TODAY=$(date +%Y-%m-%d)
+ID=0
+TABLE_ROWS=""
+
+for track_dir in "$TRACKS_DIR"/*/; do
+  [ -d "$track_dir" ] || continue
+  track_name=$(basename "$track_dir")
+  ID=$((ID + 1))
+
+  # Read metadata.json if exists
+  STATUS="⬜ Pending"
+  OWNER=""
+  CREATED=""
+
+  if [ -f "$track_dir/metadata.json" ]; then
+    # Extract status
+    META_STATUS=$(grep -o '"status"[[:space:]]*:[[:space:]]*"[^"]*"' "$track_dir/metadata.json" | sed 's/.*"status"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//')
+    if [ "$META_STATUS" = "completed" ]; then
+      STATUS="✅ Complete"
+    elif [ "$META_STATUS" = "in_progress" ]; then
+      STATUS="⏳ In Progress"
+    fi
+
+    # Extract created_at
+    CREATED=$(grep -o '"created_at"[[:space:]]*:[[:space:]]*"[^"]*"' "$track_dir/metadata.json" | sed 's/.*"created_at"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//')
+  fi
+
+  # Auto-calculate status from plan.md if exists
+  if [ -f "$track_dir/plan.md" ]; then
+    TOTAL=$(grep -cE '^\s*- \[[ x]\]' "$track_dir/plan.md" 2>/dev/null || echo 0)
+    DONE=$(grep -cE '^\s*- \[x\]' "$track_dir/plan.md" 2>/dev/null || echo 0)
+
+    if [ "$TOTAL" -gt 0 ]; then
+      if [ "$DONE" -eq "$TOTAL" ]; then
+        STATUS="✅ Complete"
+      elif [ "$DONE" -gt 0 ]; then
+        STATUS="⏳ In Progress"
+      else
+        STATUS="⬜ Pending"
+      fi
+    fi
+  fi
+
+  TABLE_ROWS="${TABLE_ROWS}| ${ID} | ${track_name} | ${STATUS} | ${OWNER} | [plan](tracks/${track_name}/plan.md) |"$'\n'
+done
+
+# Generate tracks-registry.md
+mkdir -p "$(dirname "$REGISTRY_PATH")"
+cat > "$REGISTRY_PATH" << EOF
+---
+title: "Tracks Registry"
+tags:
+  - skill-conductor
+type: tracks-registry
+---
+
+# Tracks Registry
 
 <!-- Auto-synced by skill-conductor. Manual edits will be overwritten. -->
 
-## Projects
+## Project: ${PROJECT_NAME}
+
+| ID | Name | Status | Owner | Link |
+| :-- | :-- | :-- | :-- | :-- |
+${TABLE_ROWS}
+*Last synced: ${TODAY}*
 EOF
-fi
 
-# Build skill list for this project
-TODAY=$(date +%Y-%m-%d)
-SKILL_TABLE=""
-
-for skill_file in $SKILL_FILES; do
-  skill_name=$(basename "$(dirname "$skill_file")")
-  
-  # Extract name from frontmatter
-  FM_NAME=$(awk 'BEGIN{c=0} /^---$/{c++; next} c==1{print} c>1{exit}' "$skill_file" | grep -E '^name:' | sed 's/^name:\s*//' | tr -d '"' | tr -d "'")
-  
-  # Extract description length
-  DESC=$(awk 'BEGIN{c=0} /^---$/{c++; next} c==1{print} c>1{exit}' "$skill_file" | grep -E '^description:' | sed 's/^description:\s*//' | sed 's/^"//' | sed 's/"$//')
-  DESC_LEN=${#DESC}
-  
-  # Check description format
-  FORMAT_STATUS="✅"
-  if echo "$DESC" | grep -qE '^\s*[|>]'; then
-    FORMAT_STATUS="❌ multi-line"
-  elif [ "$DESC_LEN" -gt 1024 ]; then
-    FORMAT_STATUS="❌ too long ($DESC_LEN)"
-  fi
-  
-  SKILL_TABLE="${SKILL_TABLE}| ${FM_NAME:-$skill_name} | - | $FORMAT_STATUS | $TODAY |"$'\n'
-done
-
-# Check if project already in registry
-if grep -q "### $PROJECT_NAME" "$REGISTRY_PATH" 2>/dev/null; then
-  echo "ℹ️  Updating existing entry for $PROJECT_NAME"
-  # For simplicity, just print the updated table
-  echo ""
-  echo "Updated skill table:"
-  echo "$SKILL_TABLE"
-else
-  echo "ℹ️  Adding new entry for $PROJECT_NAME"
-  # Append new project section
-  cat >> "$REGISTRY_PATH" << EOF
-
-### $PROJECT_NAME
-**Path**: $PROJECT_PATH
-**Last synced**: $TODAY
-
-| Skill | Version | Format | Last Updated |
-|-------|---------|--------|-------------|
-$SKILL_TABLE
-EOF
-fi
-
-echo ""
-echo "✅ Registry synced: $REGISTRY_PATH"
+echo "✅ Tracks registry synced: $REGISTRY_PATH"
+echo "  Tracks found: $ID"
 echo "============================================================"
