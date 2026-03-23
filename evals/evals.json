@@ -1,0 +1,132 @@
+{
+  "skill_name": "skill-conductor",
+  "description": "Plan, track, and ship skills for Claude Code.",
+  "evals": [
+    {
+      "id": 1,
+      "query": "I want to add a new skill to handle orthopedic conditions like bunions",
+      "should_trigger": true,
+      "category": "new-skill",
+      "notes": "Natural language intent to create a skill"
+    },
+    {
+      "id": 2,
+      "query": "帮我检查一下我刚写的 SKILL.md 有没有问题",
+      "should_trigger": true,
+      "category": "review",
+      "notes": "Chinese natural language review request"
+    },
+    {
+      "id": 3,
+      "query": "ship this to GitHub, bump the version",
+      "should_trigger": true,
+      "category": "publish",
+      "notes": "Casual publish request"
+    },
+    {
+      "id": 4,
+      "query": "What's the status of my skill projects?",
+      "should_trigger": true,
+      "category": "status",
+      "notes": "Progress check"
+    },
+    {
+      "id": 5,
+      "query": "I'm starting a new project for managing nutrition advice, need to set up the skill development workflow",
+      "should_trigger": true,
+      "category": "setup",
+      "notes": "New project setup"
+    },
+    {
+      "id": 6,
+      "query": "Keep going with the implementation, what's next on the plan?",
+      "should_trigger": true,
+      "category": "implement",
+      "notes": "Continue implementation"
+    },
+    {
+      "id": 7,
+      "query": "Is my SKILL.md formatted correctly? I'm worried about the description field",
+      "should_trigger": true,
+      "category": "validate",
+      "notes": "Validation request"
+    },
+    {
+      "id": 8,
+      "query": "做一下技能开发的计划",
+      "should_trigger": true,
+      "category": "new",
+      "notes": "Chinese: make a skill development plan"
+    },
+    {
+      "id": 9,
+      "query": "Review my skill and tell me if the triggers will work",
+      "should_trigger": true,
+      "category": "review",
+      "notes": "Review with trigger testing"
+    },
+    {
+      "id": 10,
+      "query": "I need to release v2.0 of my health skills collection",
+      "should_trigger": true,
+      "category": "publish",
+      "notes": "Release request with version"
+    },
+    {
+      "id": 11,
+      "query": "Write me a Python function to sort a list",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Simple coding task, not skill development"
+    },
+    {
+      "id": 12,
+      "query": "I have a headache, what should I do?",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Health question, not skill development"
+    },
+    {
+      "id": 13,
+      "query": "How do I install a plugin in Obsidian?",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Obsidian question, not skill development"
+    },
+    {
+      "id": 14,
+      "query": "Create a new GitHub repository for me",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "GitHub repo creation, not skill development"
+    },
+    {
+      "id": 15,
+      "query": "Help me write a blog post about AI",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Writing task, not skill development"
+    },
+    {
+      "id": 16,
+      "query": "I want to plan my weekend trip",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Contains 'plan' but not skill-related"
+    },
+    {
+      "id": 17,
+      "query": "Review this pull request for me",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Contains 'review' but it's a PR review"
+    },
+    {
+      "id": 18,
+      "query": "Deploy my app to production",
+      "should_trigger": false,
+      "category": "false-positive",
+      "notes": "Contains 'deploy' but it's app deployment"
+    }
+  ]
+}

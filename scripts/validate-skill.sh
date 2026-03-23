@@ -26,8 +26,8 @@ if [ "$(basename "$SKILL_FILE")" != "SKILL.md" ]; then
   ERRORS=$((ERRORS + 1))
 fi
 
-# Extract frontmatter
-FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$SKILL_FILE" | sed '1d;$d')
+# Extract frontmatter (only between first and second --- markers)
+FRONTMATTER=$(awk 'BEGIN{c=0} /^---$/{c++; next} c==1{print} c>1{exit}' "$SKILL_FILE")
 
 if [ -z "$FRONTMATTER" ]; then
   echo "❌ FAIL: No YAML frontmatter found (must be between --- markers)"
@@ -106,8 +106,8 @@ else
   echo "✅ line count: $LINE_COUNT (< 500)"
 fi
 
-# Check for forbidden patterns in frontmatter
-if echo "$FRONTMATTER" | grep -qE '<[^>]+>'; then
+# Check for forbidden XML tags in frontmatter
+if echo "$FRONTMATTER" | grep -qE '</?[a-zA-Z][a-zA-Z0-9]*[^>]*>'; then
   echo "❌ FAIL: XML tags found in frontmatter (not allowed)"
   ERRORS=$((ERRORS + 1))
 fi

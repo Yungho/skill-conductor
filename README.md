@@ -6,18 +6,15 @@ A Claude Code skill that orchestrates the complete lifecycle of skill developmen
 
 ## What It Does
 
-Skill Conductor helps you develop, track, and publish skills for Claude Code (and compatible platforms). It provides:
-
 - **Socratic questioning** — Guides you through creating project context and skill specifications
 - **Structured workflow** — Every change goes through spec → plan → implement → review → publish
 - **Automated validation** — Checks SKILL.md format, trigger conflicts, and description quality
 - **Multi-project support** — Manage skills across multiple projects from a single workspace
-- **Trigger simulation** — Test if your skills will actually be triggered by real user queries
+- **Intent recognition** — Understands what you mean, not just the words you use
 
 ## Installation
 
 ```bash
-# Clone into your skills directory
 git clone https://github.com/Yungho/skill-conductor.git ~/.claude/skills/skill-conductor
 ```
 
@@ -33,43 +30,63 @@ git clone https://github.com/Yungho/skill-conductor.git ~/.claude/skills/skill-c
 /skill-conductor validate <path> # Quick validate a SKILL.md
 ```
 
-## Workflow
+You don't need to use exact commands. Natural language works too:
+- "I need a new skill for tracking my diet" → `new`
+- "Can you check if my skill is formatted correctly?" → `review`
+- "Let's ship this to GitHub" → `publish`
+
+## Project Structure
 
 ```
-setup (Socratic → project-context.md + guidelines.md + workflow.md)
-  ↓
-new (Socratic → spec.md + plan.md + metadata.json)
-  ↓
-implement (follow plan, update checklist)
-  ↓
-review (7-step pipeline: structure, triggers, simulation, routing, spec, quality, optimization)
-  ↓
-publish (version, changelog, git, github)
+skill-conductor/
+├── SKILL.md                    # Core instructions (83 lines, lean)
+├── docs/commands/              # Detailed per-command instructions
+│   ├── setup.md
+│   ├── new.md
+│   ├── implement.md
+│   ├── status.md
+│   ├── review.md
+│   ├── publish.md
+│   └── validate.md
+├── templates/                  # File templates for workspace generation
+├── scripts/                    # Validation and utility scripts
+├── evals/                      # Test cases for trigger accuracy
+├── README.md
+└── LICENSE
 ```
 
-## Workspace Structure
+## Workspace
 
 ```
 ~/.skill-conductor/
-├── registry.md                     # Global skill index
+├── registry.md                # Global skill index
 └── projects/
     └── <project-name>/
-        ├── project-context.md      # Project definition
-        ├── guidelines.md           # Writing standards
-        ├── workflow.md             # Development process
-        ├── references.md           # Reference sources
+        ├── project-context.md
+        ├── guidelines.md
+        ├── workflow.md
+        ├── references.md
         └── tracks/
             └── <date>_<name>/
-                ├── spec.md         # Requirements
-                ├── plan.md         # Task checklist
-                └── metadata.json   # Track metadata
+                ├── spec.md
+                ├── plan.md
+                └── metadata.json
 ```
 
-## Key Rules
+## Design Principles
 
-1. **Description must be single-line** — Never use `|` or `>` YAML multi-line format
-2. **Description ≤ 1024 characters** — Longer descriptions get truncated
-3. **References are per-project** — Each project configures its own reference sources
+1. **Intent Recognition** — Semantic understanding, not keyword matching
+2. **Progressive Disclosure** — Load context incrementally
+3. **Adaptive Checkpoints** — Adjust verification frequency by complexity
+4. **External Verification** — WebSearch to verify format rules (not cached memory)
+5. **Socratic Questioning** — Ask before generating
+
+## Key Format Rules
+
+- `description` must be single-line string (double quotes, no `|` or `>`)
+- `description` ≤ 1024 characters
+- `name` lowercase + hyphens, ≤ 64 characters
+- SKILL.md under 500 lines
 
 ## Inspired By
 
@@ -78,4 +95,4 @@ publish (version, changelog, git, github)
 
 ## License
 
-MIT
+MIT — Author: Yungho

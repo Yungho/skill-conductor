@@ -44,10 +44,10 @@ for skill_file in $SKILL_FILES; do
   skill_name=$(basename "$(dirname "$skill_file")")
   
   # Extract name from frontmatter
-  FM_NAME=$(sed -n '/^---$/,/^---$/p' "$skill_file" | sed '1d;$d' | grep -E '^name:' | sed 's/^name:\s*//' | tr -d '"' | tr -d "'")
+  FM_NAME=$(awk 'BEGIN{c=0} /^---$/{c++; next} c==1{print} c>1{exit}' "$skill_file" | grep -E '^name:' | sed 's/^name:\s*//' | tr -d '"' | tr -d "'")
   
   # Extract description length
-  DESC=$(sed -n '/^---$/,/^---$/p' "$skill_file" | sed '1d;$d' | grep -E '^description:' | sed 's/^description:\s*//' | sed 's/^"//' | sed 's/"$//')
+  DESC=$(awk 'BEGIN{c=0} /^---$/{c++; next} c==1{print} c>1{exit}' "$skill_file" | grep -E '^description:' | sed 's/^description:\s*//' | sed 's/^"//' | sed 's/"$//')
   DESC_LEN=${#DESC}
   
   # Check description format

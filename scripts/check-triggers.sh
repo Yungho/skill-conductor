@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 # check-triggers.sh — Detect trigger word conflicts across all skills in a project
 # Usage: bash check-triggers.sh <project-path>
-# Project path should contain skill directories, each with SKILL.md
-
-set -euo pipefail
+# Compatible with macOS bash 3.x
 
 PROJECT_PATH="${1:?Usage: check-triggers.sh <project-path>}"
 
@@ -13,62 +11,62 @@ echo "  Project: $PROJECT_PATH"
 echo "============================================================"
 echo ""
 
-# Find all SKILL.md files
-SKILL_FILES=$(find "$PROJECT_PATH" -name "SKILL.md" -type f 2>/dev/null | sort)
-
-if [ -z "$SKILL_FILES" ]; then
-  echo "❌ No SKILL.md files found in $PROJECT_PATH"
-  exit 1
-fi
-
-# Extract triggers from each skill
-declare -A TRIGGER_MAP  # trigger -> skill name
-CONFLICTS=0
 SKILL_COUNT=0
+CONFLICTS=0
+TRIGGER_FILE=$(mktemp)
+trap 'rm -f "$TRIGGER_FILE"' EXIT
 
-for skill_file in $SKILL_FILES; do
+# Collect all triggers from all skills
+for skill_file in $(find "$PROJECT_PATH" -name "SKILL.md" -type f 2>/dev/null | sort); do
   skill_name=$(basename "$(dirname "$skill_file")")
   SKILL_COUNT=$((SKILL_COUNT + 1))
-  
-  # Extract description
-  DESC=$(sed -n '/^---$/,/^---$/p' "$skill_file" | sed '1d;$d' | grep -E '^description:' | sed 's/^description:\s*//' | sed 's/^"//' | sed 's/"$//')
-  
+
+  # Extract description (only between first two --- markers)
+  DESC=$(awk 'BEGIN{c=0} /^---$/{c++; next} c==1{print} c>1{exit}' "$skill_file" | grep '^description:' | sed 's/^description: *//' | sed 's/^"//' | sed 's/"$//')
+
   if [ -z "$DESC" ]; then
-    echo "⚠️  $skill_name: no description found"
+    echo "  ⚠️  $skill_name: no description found"
     continue
   fi
-  
-  # Extract trigger words (after "Triggers:" or "Use when:" or keywords in description)
-  # Simple approach: extract words after "Triggers:" or comma-separated keywords
-  TRIGGERS=$(echo "$DESC" | grep -oiE 'triggers?:\s*.+' | sed 's/triggers?:\s*//i' | tr ',' '\n' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//' | tr '[:upper:]' '[:lower:]')
-  
-  if [ -z "$TRIGGERS" ]; then
-    echo "ℹ️  $skill_name: no explicit trigger words found in description"
+
+  # Extract triggers (after "Triggers on:" or "Triggers:")
+  AFTER_COLON=$(echo "$DESC" | sed -E 's/.*[Tt]riggers( on)?://')
+  if [ "$AFTER_COLON" = "$DESC" ]; then
+    # No "Triggers:" found — skip
     continue
   fi
-  
-  echo "📋 $skill_name:"
-  
-  while IFS= read -r trigger; do
+
+  # Split by comma, trim spaces, lowercase
+  TRIGGERS=$(echo "$AFTER_COLON" | tr ',' '\n' | sed 's/^ *//' | sed 's/ *$//' | tr '[:upper:]' '[:lower:]' | sed 's/\.$//')
+
+  echo "  📋 $skill_name:"
+  echo "$TRIGGERS" | while IFS= read -r trigger; do
     [ -z "$trigger" ] && continue
-    trigger=$(echo "$trigger" | sed 's/[.!?]*$//')
-    
-    if [ -n "${TRIGGER_MAP[$trigger]+x}" ]; then
-      echo "   ⚠️  CONFLICT: '$trigger' also used by ${TRIGGER_MAP[$trigger]}"
-      CONFLICTS=$((CONFLICTS + 1))
+
+    # Check for conflicts using grep on temp file
+    EXISTING=$(grep -F "|${trigger}|" "$TRIGGER_FILE" 2>/dev/null | head -1)
+    if [ -n "$EXISTING" ]; then
+      OWNER=$(echo "$EXISTING" | cut -d'|' -f3)
+      echo "     ⚠️  CONFLICT: '${trigger}' also used by ${OWNER}"
+      echo "CONFLICT" >> "${TRIGGER_FILE}.count"
     else
-      TRIGGER_MAP["$trigger"]="$skill_name"
+      echo "|${trigger}|${skill_name}|" >> "$TRIGGER_FILE"
     fi
-    echo "   - $trigger"
-  done <<< "$TRIGGERS"
-  
+    echo "     - ${trigger}"
+  done
   echo ""
 done
 
-# Summary
+# Count results
+UNIQUE=$(wc -l < "$TRIGGER_FILE" | tr -d ' ')
+CONFLICTS=0
+if [ -f "${TRIGGER_FILE}.count" ]; then
+  CONFLICTS=$(wc -l < "${TRIGGER_FILE}.count" | tr -d ' ')
+fi
+
 echo "============================================================"
 echo "  Skills scanned: $SKILL_COUNT"
-echo "  Unique triggers: ${#TRIGGER_MAP[@]}"
+echo "  Unique triggers: $UNIQUE"
 if [ "$CONFLICTS" -gt 0 ]; then
   echo "  ⚠️  Conflicts found: $CONFLICTS"
   echo "============================================================"
